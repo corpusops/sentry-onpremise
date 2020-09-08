@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 source <(grep -v '^#' .env | sed -E 's|^(.+)=(.*)$|: ${\1=\2}; export \1|g')
+SENTRY_SERVICE=${SENTRY_SERVICE:-sentry}
+systemctl stop $SENTRY_SERVICE || /bin/true
 
-dc="docker-compose --no-ansi"
+dc="docker-compose -f docker-compose.yml -f docker-compose.cops.yml --no-ansi -p ${COMPOSE_PROJECT_NAME:-sentry}"
 dcr="$dc run --rm"
 
 # Thanks to https://unix.stackexchange.com/a/145654/108960
@@ -94,7 +96,7 @@ fi
 
 # Clean up old stuff and ensure nothing is working while we install/update
 # This is for older versions of on-premise:
-$dc -p onpremise down --rmi local --remove-orphans
+$dc down --rmi local --remove-orphans
 # This is for newer versions
 $dc down --rmi local --remove-orphans
 
@@ -291,5 +293,5 @@ echo ""
 echo "----------------"
 echo "You're all done! Run the following command to get Sentry running:"
 echo ""
-echo "  docker-compose up -d"
+echo "  $dc up -d"
 echo ""

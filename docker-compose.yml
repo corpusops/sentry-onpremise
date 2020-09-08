@@ -58,7 +58,7 @@ services:
       - 'sentry-redis:/data'
   postgres:
     << : *restart_policy
-    image: 'postgres:9.6'
+    image: 'postgres:10.0'
     environment:
       POSTGRES_HOST_AUTH_METHOD: 'trust'
     volumes:
@@ -180,8 +180,6 @@ services:
     command: '"0 0 * * * gosu sentry sentry cleanup --days $SENTRY_EVENT_RETENTION_DAYS"'
   nginx:
     << : *restart_policy
-    ports:
-      - '9000:80/tcp'
     image: 'nginx:1.16'
     volumes:
       - type: bind
@@ -204,19 +202,12 @@ services:
       - redis
 volumes:
   sentry-data:
-    external: true
   sentry-postgres:
-    external: true
   sentry-redis:
-    external: true
   sentry-zookeeper:
-    external: true
   sentry-kafka:
-    external: true
   sentry-clickhouse:
-    external: true
   sentry-symbolicator:
-    external: true
   sentry-secrets:
   sentry-smtp:
   sentry-zookeeper-log:
