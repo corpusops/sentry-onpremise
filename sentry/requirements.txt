@@ -1,0 +1,4 @@
+# Add plugins here (after local packages were added)
+-e git+https://github.com/corpusops/sentry-auth-gitlab.git@10#egg=sentry-auth-gitlab
+-e git+https://github.com/Banno/getsentry-ldap-auth.git#egg=getsentry-ldap-auth
+
